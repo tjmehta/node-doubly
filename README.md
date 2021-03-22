@@ -5,7 +5,7 @@ Description
 # Installation
 
 ```sh
-npm i --save node-module-template
+npm i --save dualy
 ```
 
 # Usage
@@ -14,10 +14,40 @@ npm i --save node-module-template
 
 ```js
 // esm
-import nmt from 'node-module-template`
+import Dualy from 'dualy`
 // commonjs
-const nmt = require('node-module-template')
+const dualy = require('dualy').default
 ```
+
+# Methods
+
+#### at(index: number)
+
+```ts
+const list = new Linkly()
+list.push(100)
+list.at(0) // 100
+list.at(-1) // LinklyError: At negative index not supported
+```
+
+#### concat(list: Linkly<T>)
+
+```ts
+// push
+const list = new Linkly()
+list.push(100)
+list.push(200)
+list.push(300)
+
+const list2 = new Linkly()
+list.push(400)
+list.push(500)
+list.push(600)
+
+const list3 = list.concat()
+```
+
+... TODO
 
 # License
 
