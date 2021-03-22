@@ -14,9 +14,9 @@ npm i --save dualy
 
 ```js
 // esm
-import Dualy from 'dualy`
+import Doubly from 'doubly`
 // commonjs
-const dualy = require('dualy').default
+const Doubly = require('doubly').default
 ```
 
 # Methods
@@ -24,13 +24,13 @@ const dualy = require('dualy').default
 #### at(index: number)
 
 ```ts
-const list = new Linkly()
+const list = new Doubly()
 list.push(100)
 list.at(0) // 100
 list.at(-1) // LinklyError: At negative index not supported
 ```
 
-#### concat(list: Linkly<T>)
+#### concat(list: Doubly<T>)
 
 ```ts
 // push

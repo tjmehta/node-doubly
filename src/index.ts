@@ -6,9 +6,9 @@ import Node, {
 
 import BaseError from 'baseerr'
 
-class DualyError extends BaseError<{}> {}
+class DoublyError extends BaseError<{}> {}
 
-export default class Dualy<T> {
+export default class Doubly<T> {
   head: Node<T> | null = null
   tail: Node<T> | null = null
   size: number = 0
@@ -37,7 +37,7 @@ export default class Dualy<T> {
   }
 
   at(index: number) {
-    DualyError.assert(index >= 0, '"at" negative index not supported', {
+    DoublyError.assert(index >= 0, '"at" negative index not supported', {
       index,
     })
 
@@ -45,7 +45,7 @@ export default class Dualy<T> {
   }
 
   node(index: number) {
-    DualyError.assert(index >= 0, '"node" negative index not supported', {
+    DoublyError.assert(index >= 0, '"node" negative index not supported', {
       index,
     })
 
@@ -58,7 +58,7 @@ export default class Dualy<T> {
   }
 
   concat(list: Iterable<T>) {
-    const result = new Dualy<T>()
+    const result = new Doubly<T>()
 
     for (let value of this) {
       result.push(value)
@@ -71,7 +71,7 @@ export default class Dualy<T> {
   }
 
   delete(index: number): boolean {
-    DualyError.assert(index >= 0, '"delete" negative index not supported', {
+    DoublyError.assert(index >= 0, '"delete" negative index not supported', {
       index,
     })
 
@@ -94,7 +94,7 @@ export default class Dualy<T> {
     return true
   }
 
-  every(cb: (value: T, i: number, list: Dualy<T>) => unknown): boolean {
+  every(cb: (value: T, i: number, list: Doubly<T>) => unknown): boolean {
     let i = 0
 
     for (let value of this) {
@@ -105,7 +105,7 @@ export default class Dualy<T> {
     return true
   }
 
-  forEach(cb: (value: T, i: number, list: Dualy<T>) => void) {
+  forEach(cb: (value: T, i: number, list: Doubly<T>) => void) {
     let i = 0
 
     for (let value of this) {
@@ -114,7 +114,7 @@ export default class Dualy<T> {
     }
   }
 
-  forEachRight(cb: (value: T, i: number, list: Dualy<T>) => void) {
+  forEachRight(cb: (value: T, i: number, list: Doubly<T>) => void) {
     let i = 0
 
     for (let value of nodeTraversePrevValues(this.tail)) {
@@ -123,8 +123,8 @@ export default class Dualy<T> {
     }
   }
 
-  filter(cb: (value: T, i: number, list: Dualy<T>) => unknown): Dualy<T> {
-    const result = new Dualy<T>()
+  filter(cb: (value: T, i: number, list: Doubly<T>) => unknown): Doubly<T> {
+    const result = new Doubly<T>()
     let i = 0
 
     for (let value of this) {
@@ -136,7 +136,7 @@ export default class Dualy<T> {
     return result
   }
 
-  find(cb: (value: T, i: number, list: Dualy<T>) => unknown): T | void {
+  find(cb: (value: T, i: number, list: Doubly<T>) => unknown): T | void {
     let i = 0
 
     for (let value of this) {
@@ -146,7 +146,7 @@ export default class Dualy<T> {
     }
   }
 
-  findIndex(cb: (value: T, i: number, list: Dualy<T>) => unknown): number {
+  findIndex(cb: (value: T, i: number, list: Doubly<T>) => unknown): number {
     let i = 0
 
     for (let value of this) {
@@ -168,8 +168,8 @@ export default class Dualy<T> {
     return this.findIndex((value, i, list) => compare === value)
   }
 
-  map<R>(cb: (value: T, i: number, list: Dualy<T>) => R): Dualy<R> {
-    const mapped = new Dualy<R>()
+  map<R>(cb: (value: T, i: number, list: Doubly<T>) => R): Doubly<R> {
+    const mapped = new Doubly<R>()
     let i = 0
 
     for (let value of this) {
@@ -214,13 +214,13 @@ export default class Dualy<T> {
     this.tail = node
   }
 
-  reduce<M>(cb: (memo: M | T, value: T, i: number, list: Dualy<T>) => M): M
+  reduce<M>(cb: (memo: M | T, value: T, i: number, list: Doubly<T>) => M): M
   reduce<M>(
-    cb: (memo: M, value: T, i: number, list: Dualy<T>) => M,
+    cb: (memo: M, value: T, i: number, list: Doubly<T>) => M,
     initialValue: M,
   ): M
   reduce<M>(
-    cb: (memo: M | T, value: T, i: number, list: Dualy<T>) => M,
+    cb: (memo: M | T, value: T, i: number, list: Doubly<T>) => M,
     initialValue?: M,
   ): M {
     let node = this.head
@@ -228,7 +228,7 @@ export default class Dualy<T> {
     let memo
 
     if (arguments.length === 1) {
-      DualyError.assert(
+      DoublyError.assert(
         node != null,
         'cannot "reduce" empty list with no initial value',
       )
@@ -282,7 +282,7 @@ export default class Dualy<T> {
     this.head = node
   }
 
-  some(cb: (value: T, i: number, list: Dualy<T>) => unknown): boolean {
+  some(cb: (value: T, i: number, list: Doubly<T>) => unknown): boolean {
     let node = this.head
     let i = 0
 
@@ -302,8 +302,8 @@ export default class Dualy<T> {
     node.remove()
   }
 
-  splice(index: number, removeCount: number, ...items: Array<T>): Dualy<T> {
-    const removed = new Dualy<T>()
+  splice(index: number, removeCount: number, ...items: Array<T>): Doubly<T> {
+    const removed = new Doubly<T>()
     const start = this.node(index)
     const prev = start?.prev ?? null
 
@@ -333,7 +333,7 @@ export default class Dualy<T> {
     } else {
       // insert items in the middle
       // this.head ... prev ... inserted ... this.tail
-      const inserted = new Dualy<T>()
+      const inserted = new Doubly<T>()
       items.forEach((item) => inserted.push(item))
       if (prev) {
         prev.next = inserted.head
