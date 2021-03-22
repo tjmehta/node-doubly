@@ -1,6 +1,6 @@
 {
   "name": "dualy",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Doubly linked list in TypeScript",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
