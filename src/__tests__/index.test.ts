@@ -1,5 +1,5 @@
 import LinkedList from '..'
-import Node from '../node'
+import Node from '../Node'
 
 describe('LinkedList', () => {
   describe('constructor', () => {
@@ -59,14 +59,14 @@ describe('LinkedList', () => {
       list.push(2)
       list.push(3)
       const list2 = new LinkedList()
-      list.push(4)
-      list.push(5)
-      list.push(6)
-      const results = []
-      for (let value of list) {
-        results.push(value)
-      }
-      expect(results).toMatchInlineSnapshot(`
+      list2.push(4)
+      list2.push(5)
+      list2.push(6)
+
+      const list3 = list.concat(list2)
+
+      const values = [...list3]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           1,
           2,
@@ -76,6 +76,7 @@ describe('LinkedList', () => {
           6,
         ]
       `)
+      expect(list3.size).toBe(values.length)
     })
   })
 
@@ -136,16 +137,15 @@ describe('LinkedList', () => {
         return i % 2 === 0
       })
       const list2 = list.filter(cb)
-      const results = []
-      for (let value of list2) {
-        results.push(value)
-      }
-      expect(results).toMatchInlineSnapshot(`
+
+      const values = [...list2]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           10,
           30,
         ]
       `)
+      expect(list2.size).toBe(values.length)
       expect(cb).toHaveBeenNthCalledWith(1, list.head.value, 0, list)
       expect(cb).toHaveBeenNthCalledWith(2, list.head.next.value, 1, list)
       expect(cb).toHaveBeenNthCalledWith(3, list.head.next.next.value, 2, list)
@@ -266,11 +266,8 @@ describe('LinkedList', () => {
         return val * 2
       })
       const list2 = list.map(cb)
-      const results = []
-      for (let value of list2) {
-        results.push(value)
-      }
-      expect(results).toMatchInlineSnapshot(`
+      const values = [...list2]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           20,
           40,
@@ -278,6 +275,7 @@ describe('LinkedList', () => {
           80,
         ]
       `)
+      expect(list2.size).toBe(values.length)
       expect(cb).toHaveBeenNthCalledWith(1, list.head.value, 0, list)
       expect(cb).toHaveBeenNthCalledWith(2, list.head.next.value, 1, list)
       expect(cb).toHaveBeenNthCalledWith(3, list.head.next.next.value, 2, list)
@@ -426,6 +424,9 @@ describe('LinkedList', () => {
       list.shift()
       expect(list.head).toMatchInlineSnapshot(`null`)
       expect(list.tail).toMatchInlineSnapshot(`null`)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`Array []`)
+      expect(list.size).toBe(values.length)
     })
 
     it('unshift shift unshift', () => {
@@ -447,6 +448,13 @@ describe('LinkedList', () => {
           "value": 2,
         }
       `)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          2,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
     })
 
     it('unshift shift unshift unshift', () => {
@@ -477,6 +485,14 @@ describe('LinkedList', () => {
           "value": 2,
         }
       `)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          3,
+          2,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
     })
 
     it('unshift unshift', () => {
@@ -505,6 +521,14 @@ describe('LinkedList', () => {
           "value": 1,
         }
       `)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          2,
+          1,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
     })
   })
 
@@ -592,7 +616,8 @@ describe('LinkedList', () => {
         ]
       `)
 
-      expect([...list]).toMatchInlineSnapshot(`
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           100,
           200,
@@ -602,6 +627,7 @@ describe('LinkedList', () => {
           6,
         ]
       `)
+      expect(list.size).toBe(values.length)
     })
 
     it('splice end', () => {
@@ -618,7 +644,8 @@ describe('LinkedList', () => {
       for (let item of removed) removedItems.push(item)
       expect(removedItems).toMatchInlineSnapshot(`Array []`)
 
-      expect([...list]).toMatchInlineSnapshot(`
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           1,
           2,
@@ -631,6 +658,7 @@ describe('LinkedList', () => {
           300,
         ]
       `)
+      expect(list.size).toBe(values.length)
     })
 
     it('should remove and push items', () => {
@@ -644,13 +672,14 @@ describe('LinkedList', () => {
       const removed = list.splice(1, 2, 100, 200, 300)
 
       expect([...removed]).toMatchInlineSnapshot(`
-      Array [
-        2,
-        3,
-      ]
+        Array [
+          2,
+          3,
+        ]
       `)
 
-      expect([...list]).toMatchInlineSnapshot(`
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           1,
           100,
@@ -661,6 +690,7 @@ describe('LinkedList', () => {
           6,
         ]
       `)
+      expect(list.size).toBe(values.length)
     })
 
     it('should push items', () => {
@@ -675,7 +705,8 @@ describe('LinkedList', () => {
 
       expect([...removed]).toMatchInlineSnapshot(`Array []`)
 
-      expect([...list]).toMatchInlineSnapshot(`
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
         Array [
           1,
           2,
@@ -688,6 +719,7 @@ describe('LinkedList', () => {
           6,
         ]
       `)
+      expect(list.size).toBe(values.length)
     })
 
     it('should push items at 0', () => {
@@ -698,18 +730,20 @@ describe('LinkedList', () => {
       list.push(4)
       list.push(5)
       list.push(6)
-      const removed = list.splice(2, 0, 100, 200, 300)
+      const removed = list.splice(0, 2, 100, 200, 300)
 
       const removedItems = []
       for (let item of removed) removedItems.push(item)
-      expect(removedItems).toMatchInlineSnapshot(`Array []`)
-
-      const listItems = []
-      for (let item of list) listItems.push(item)
-      expect(listItems).toMatchInlineSnapshot(`
+      expect(removedItems).toMatchInlineSnapshot(`
         Array [
           1,
           2,
+        ]
+      `)
+
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
           100,
           200,
           300,
@@ -719,6 +753,7 @@ describe('LinkedList', () => {
           6,
         ]
       `)
+      expect(list.size).toBe(values.length)
     })
   })
 })

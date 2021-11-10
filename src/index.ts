@@ -185,12 +185,14 @@ export default class Doubly<T> {
 
     if (prevTail == null) return
 
+    this.size--
+
     const nextTail = this.tail?.prev ?? null
 
     this.tail = nextTail
     if (this.tail == null) this.head = nextTail
 
-    prevTail.remove()
+    prevTail.unlink()
     return prevTail
   }
 
@@ -201,6 +203,8 @@ export default class Doubly<T> {
   }
 
   pushNode(node: Node<T>) {
+    this.size++
+
     if (this.tail == null) {
       // this.head == null
       this.head = node
@@ -253,12 +257,14 @@ export default class Doubly<T> {
 
     if (prevHead == null) return
 
+    this.size--
+
     const nextHead = this.head?.next ?? null
 
     this.head = nextHead
     if (this.head == null) this.tail = nextHead
 
-    prevHead.remove()
+    prevHead.unlink()
 
     return prevHead
   }
@@ -270,6 +276,8 @@ export default class Doubly<T> {
   }
 
   unshiftNode(node: Node<T>) {
+    this.size++
+
     if (this.head == null) {
       // this.head == null
       this.head = node
@@ -298,8 +306,10 @@ export default class Doubly<T> {
 
   remove(node: Node<T>) {
     if (node === this.head) this.shift()
-    if (node === this.tail) this.pop()
-    node.remove()
+    else if (node === this.tail) this.pop()
+    else this.size--
+
+    node.unlink()
   }
 
   splice(index: number, removeCount: number, ...items: Array<T>): Doubly<T> {
@@ -314,11 +324,11 @@ export default class Doubly<T> {
 
     // remove items
     let count = 0
-    let restStart = prev?.next ?? null
+    let restHead = prev?.next ?? null
     for (let next of nodeTraverseNextNodes(start)) {
       if (count >= removeCount) break
       count++
-      restStart = next?.next
+      restHead = next?.next
       this.remove(next)
       removed.pushNode(next)
     }
@@ -335,15 +345,20 @@ export default class Doubly<T> {
       // this.head ... prev ... inserted ... this.tail
       const inserted = new Doubly<T>()
       items.forEach((item) => inserted.push(item))
-      if (prev) {
-        prev.next = inserted.head
-      }
-      if (inserted.tail) {
-        inserted.tail.next = restStart
-        if (restStart) {
-          restStart.prev = inserted.tail
+      if (inserted.head) {
+        inserted.head.prev = prev
+        if (prev) {
+          prev.next = inserted.head
         }
       }
+      if (inserted.tail) {
+        inserted.tail.next = restHead
+        if (restHead) {
+          restHead.prev = inserted.tail
+        }
+      }
+
+      this.size += inserted.size
     }
 
     return removed

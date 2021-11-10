@@ -9,7 +9,7 @@ export default class Node<T> {
     this.next = opts?.next || null
   }
 
-  remove() {
+  unlink() {
     if (this.prev) this.prev.next = this.next
     if (this.next) this.next.prev = this.prev
     this.prev = null
