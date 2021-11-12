@@ -6,6 +6,8 @@ import Node, {
 
 import BaseError from 'baseerr'
 
+export const DoublyNode = Node
+
 class DoublyError extends BaseError<{}> {}
 
 export default class Doubly<T> {
