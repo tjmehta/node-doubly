@@ -212,10 +212,8 @@ export default class Doubly<T> {
       return
     }
 
-    this.tail.next = node
-    node.prev = this.tail
-    node.next = null
-    this.tail = node
+    this.tail = this.tail.linkNext(node)
+    this.tail.next = null
   }
 
   reduce<M>(cb: (memo: M | T, value: T, i: number, list: Doubly<T>) => M): M
@@ -285,9 +283,9 @@ export default class Doubly<T> {
       return
     }
 
-    this.head.prev = node
-    node.next = this.head
+    node.linkNext(this.head)
     this.head = node
+    this.head.prev = null
   }
 
   some(cb: (value: T, i: number, list: Doubly<T>) => unknown): boolean {
@@ -345,18 +343,8 @@ export default class Doubly<T> {
       // this.head ... prev ... inserted ... this.tail
       const inserted = new Doubly<T>()
       items.forEach((item) => inserted.push(item))
-      if (inserted.head) {
-        inserted.head.prev = prev
-        if (prev) {
-          prev.next = inserted.head
-        }
-      }
-      if (inserted.tail) {
-        inserted.tail.next = restHead
-        if (restHead) {
-          restHead.prev = inserted.tail
-        }
-      }
+      if (inserted.head) inserted.head.linkPrev(prev)
+      if (inserted.tail) inserted.tail.linkNext(restHead)
 
       this.size += inserted.size
     }

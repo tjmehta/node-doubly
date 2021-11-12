@@ -9,6 +9,18 @@ export default class Node<T> {
     this.next = opts?.next || null
   }
 
+  linkNext<N extends Node<T> | null>(next: N): N {
+    this.next = next
+    if (next) next.prev = this
+    return next
+  }
+
+  linkPrev<N extends Node<T> | null>(prev: N): N {
+    this.prev = prev
+    if (prev) prev.next = this
+    return prev
+  }
+
   unlink() {
     if (this.prev) this.prev.next = this.next
     if (this.next) this.next.prev = this.prev
