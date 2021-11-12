@@ -300,7 +300,8 @@ describe('LinkedList', () => {
     it('push pop', () => {
       const list = new LinkedList()
       list.push(1)
-      list.pop()
+      const value = list.pop()
+      expect(value).toBe(1)
       expect(list.head).toMatchInlineSnapshot(`null`)
       expect(list.tail).toMatchInlineSnapshot(`null`)
     })
@@ -419,9 +420,10 @@ describe('LinkedList', () => {
     })
 
     it('unshift shift', () => {
-      const list = new LinkedList()
+      const list = new LinkedList<number>()
       list.unshift(1)
-      list.shift()
+      const value = list.shift()
+      expect(value).toBe(1)
       expect(list.head).toMatchInlineSnapshot(`null`)
       expect(list.tail).toMatchInlineSnapshot(`null`)
       const values = [...list]

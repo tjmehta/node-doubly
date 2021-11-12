@@ -181,6 +181,11 @@ export default class Doubly<T> {
   }
 
   pop() {
+    const node = this.popNode()
+    return node?.value
+  }
+
+  popNode() {
     const prevTail = this.tail
 
     if (prevTail == null) return
@@ -251,6 +256,11 @@ export default class Doubly<T> {
   }
 
   shift() {
+    const node = this.shiftNode()
+    return node?.value
+  }
+
+  shiftNode() {
     const prevHead = this.head
 
     if (prevHead == null) return
