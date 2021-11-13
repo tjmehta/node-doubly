@@ -77,23 +77,21 @@ export default class Doubly<T> {
       index,
     })
 
-    const node = this.node(index - 1)
+    const node = this.node(index)
 
     if (node == null) return false
 
-    if (this.head === node) {
-      this.shift()
-      return true
-    }
-    if (this.tail === node) {
-      this.pop()
-      return true
-    }
-
-    if (node.prev) node.prev.next = node.next
-    if (node.next) node.next.prev = node.prev
+    this.deleteNode(node)
 
     return true
+  }
+
+  deleteNode(node: Node<T>) {
+    if (node === this.head) this.shift()
+    else if (node === this.tail) this.pop()
+    else this.size--
+
+    node.unlink()
   }
 
   every(cb: (value: T, i: number, list: Doubly<T>) => unknown): boolean {
@@ -314,14 +312,6 @@ export default class Doubly<T> {
     return false
   }
 
-  remove(node: Node<T>) {
-    if (node === this.head) this.shift()
-    else if (node === this.tail) this.pop()
-    else this.size--
-
-    node.unlink()
-  }
-
   splice(index: number, removeCount: number, ...items: Array<T>): Doubly<T> {
     const removed = new Doubly<T>()
     const start = this.node(index)
@@ -339,7 +329,7 @@ export default class Doubly<T> {
       if (count >= removeCount) break
       count++
       restHead = next?.next
-      this.remove(next)
+      this.deleteNode(next)
       removed.pushNode(next)
     }
 
