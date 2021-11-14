@@ -22,10 +22,14 @@ export default class Node<T> {
   }
 
   unlink() {
-    if (this.prev) this.prev.next = this.next
-    if (this.next) this.next.prev = this.prev
+    if (this.prev == null && this.next == null) return false
+
+    if (this.prev) this.prev.linkNext(this.next)
+    if (this.next) this.next.linkPrev(this.prev)
     this.prev = null
     this.next = null
+
+    return true
   }
 }
 

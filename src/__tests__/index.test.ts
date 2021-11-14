@@ -182,6 +182,62 @@ describe('LinkedList', () => {
     })
   })
 
+  describe('deleteNode', () => {
+    it('should not deleteNode twice (head)', () => {
+      const list = new LinkedList()
+      list.push(1)
+      const node = list.tail
+      list.push(2)
+      list.push(3)
+      list.deleteNode(node)
+      list.deleteNode(node)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          2,
+          3,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should not deleteNode twice (middle)', () => {
+      const list = new LinkedList()
+      list.push(1)
+      list.push(2)
+      const node = list.tail
+      list.push(3)
+      list.deleteNode(node)
+      list.deleteNode(node)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          1,
+          3,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should not deleteNode twice (tail)', () => {
+      const list = new LinkedList()
+      list.push(1)
+      list.push(2)
+      list.push(3)
+      const node = list.tail
+      list.deleteNode(node)
+      list.deleteNode(node)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          1,
+          2,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+  })
+
   describe('every', () => {
     it('should iterate through all items if all return truthy', () => {
       const list = new LinkedList()
@@ -446,8 +502,8 @@ describe('LinkedList', () => {
 
     it('push pop push push', () => {
       const list = new LinkedList()
-      // list.push(1)
-      // list.pop()
+      list.push(1)
+      list.pop()
       list.push(2)
       list.push(3)
       expect(list.head).toMatchInlineSnapshot(`

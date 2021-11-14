@@ -89,9 +89,7 @@ export default class Doubly<T> {
   deleteNode(node: Node<T>) {
     if (node === this.head) this.shift()
     else if (node === this.tail) this.pop()
-    else this.size--
-
-    node.unlink()
+    else if (node.unlink()) this.size--
   }
 
   every(cb: (value: T, i: number, list: Doubly<T>) => unknown): boolean {
@@ -195,7 +193,8 @@ export default class Doubly<T> {
     const nextTail = this.tail?.prev ?? null
 
     this.tail = nextTail
-    if (this.tail == null) this.head = nextTail
+    this.tail?.linkNext(null)
+    if (this.tail == null) this.head = null
 
     prevTail.unlink()
     return prevTail
@@ -270,7 +269,7 @@ export default class Doubly<T> {
     const nextHead = this.head?.next ?? null
 
     this.head = nextHead
-    if (this.head == null) this.tail = nextHead
+    if (this.head == null) this.tail = null
 
     prevHead.unlink()
 
