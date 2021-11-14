@@ -80,6 +80,108 @@ describe('LinkedList', () => {
     })
   })
 
+  describe('delete', () => {
+    it('should error if index is negative', () => {
+      const list = new LinkedList()
+      expect(() => list.delete(-1)).toThrowErrorMatchingInlineSnapshot(
+        `"\\"delete\\" negative index not supported"`,
+      )
+    })
+
+    it('should delete at index (empty list)', () => {
+      const list = new LinkedList()
+      expect(list.delete(2)).toMatchInlineSnapshot(`false`)
+    })
+
+    it('should delete at index (index exists, first value)', () => {
+      const list = new LinkedList()
+      list.push(100)
+      list.push(200)
+      expect(list.delete(0)).toMatchInlineSnapshot(`true`)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          200,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should delete at index (index exists, last value)', () => {
+      const list = new LinkedList()
+      list.push(100)
+      list.push(200)
+      expect(list.delete(1)).toMatchInlineSnapshot(`true`)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          100,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should delete at index (index exists, 1 of 5)', () => {
+      const list = new LinkedList()
+      list.push(100)
+      list.push(200)
+      list.push(300)
+      list.push(400)
+      list.push(500)
+      expect(list.delete(1)).toMatchInlineSnapshot(`true`)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          100,
+          300,
+          400,
+          500,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should delete at index (index exists, 2 of 5)', () => {
+      const list = new LinkedList()
+      list.push(100)
+      list.push(200)
+      list.push(300)
+      list.push(400)
+      list.push(500)
+      expect(list.delete(2)).toMatchInlineSnapshot(`true`)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          100,
+          200,
+          400,
+          500,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should delete at index (index exists, 3 of 5)', () => {
+      const list = new LinkedList()
+      list.push(100)
+      list.push(200)
+      list.push(300)
+      list.push(400)
+      list.push(500)
+      expect(list.delete(3)).toMatchInlineSnapshot(`true`)
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          100,
+          200,
+          300,
+          500,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+  })
+
   describe('every', () => {
     it('should iterate through all items if all return truthy', () => {
       const list = new LinkedList()
@@ -122,6 +224,21 @@ describe('LinkedList', () => {
       expect(cb).toHaveBeenNthCalledWith(1, list.head.value, 0, list)
       expect(cb).toHaveBeenNthCalledWith(2, list.head.next.value, 1, list)
       expect(cb).toHaveBeenNthCalledWith(3, list.head.next.next.value, 2, list)
+      expect(cb).toHaveBeenCalledTimes(3)
+    })
+  })
+
+  describe('forEachRight', () => {
+    it('should iterate through all items', () => {
+      const list = new LinkedList()
+      list.push(9)
+      list.push(10)
+      list.push(11)
+      const cb = jest.fn()
+      list.forEachRight(cb)
+      expect(cb).toHaveBeenNthCalledWith(1, list.head.next.next.value, 0, list)
+      expect(cb).toHaveBeenNthCalledWith(2, list.head.next.value, 1, list)
+      expect(cb).toHaveBeenNthCalledWith(3, list.head.value, 2, list)
       expect(cb).toHaveBeenCalledTimes(3)
     })
   })
@@ -640,6 +757,37 @@ describe('LinkedList', () => {
       list.push(4)
       list.push(5)
       list.push(6)
+      const removed = list.splice(5, 0, 100, 200, 300)
+
+      const removedItems = []
+      for (let item of removed) removedItems.push(item)
+      expect(removedItems).toMatchInlineSnapshot(`Array []`)
+
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          100,
+          200,
+          300,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('splice after end', () => {
+      const list = new LinkedList()
+      list.push(1)
+      list.push(2)
+      list.push(3)
+      list.push(4)
+      list.push(5)
+      list.push(6)
       const removed = list.splice(100, 3, 100, 200, 300)
 
       const removedItems = []
@@ -658,6 +806,35 @@ describe('LinkedList', () => {
           100,
           200,
           300,
+        ]
+      `)
+      expect(list.size).toBe(values.length)
+    })
+
+    it('should remove', () => {
+      const list = new LinkedList()
+      list.push(1)
+      list.push(2)
+      list.push(3)
+      list.push(4)
+      list.push(5)
+      list.push(6)
+      const removed = list.splice(1, 2)
+
+      expect([...removed]).toMatchInlineSnapshot(`
+        Array [
+          2,
+          3,
+        ]
+      `)
+
+      const values = [...list]
+      expect(values).toMatchInlineSnapshot(`
+        Array [
+          1,
+          4,
+          5,
+          6,
         ]
       `)
       expect(list.size).toBe(values.length)
